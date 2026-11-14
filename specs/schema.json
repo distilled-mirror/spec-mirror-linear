@@ -20741,6 +20741,16 @@
             "defaultValue": null
           },
           {
+            "name": "searchableContent",
+            "description": "Comparator for the initiative's name and summary.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ContentComparator",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "creator",
             "description": "Filters that the initiative creator must satisfy.",
             "type": {
@@ -20862,7 +20872,7 @@
           },
           {
             "name": "activityType",
-            "description": "Comparator for the initiative activity type.",
+            "description": "Not supported. Initiative activity is not stored on the server, so filters that set this field are rejected.",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringComparator",
@@ -21506,6 +21516,16 @@
             "defaultValue": null
           },
           {
+            "name": "searchableContent",
+            "description": "Comparator for the initiative's name and summary.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ContentComparator",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "creator",
             "description": "Filters that the initiative creator must satisfy.",
             "type": {
@@ -21627,7 +21647,7 @@
           },
           {
             "name": "activityType",
-            "description": "Comparator for the initiative activity type.",
+            "description": "Not supported. Initiative activity is not stored on the server, so filters that set this field are rejected.",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringComparator",
@@ -24430,6 +24450,16 @@
             "defaultValue": null
           },
           {
+            "name": "searchableContent",
+            "description": "Comparator for the initiative's name and summary.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ContentComparator",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "creator",
             "description": "Filters that the initiative creator must satisfy.",
             "type": {
@@ -24551,7 +24581,7 @@
           },
           {
             "name": "activityType",
-            "description": "Comparator for the initiative activity type.",
+            "description": "Not supported. Initiative activity is not stored on the server, so filters that set this field are rejected.",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringComparator",
@@ -71353,6 +71383,16 @@
             "description": "Searches accessible documents using text matching and meaning. Use teamId to narrow the search, and includeArchived to include archived documents. Results are ordered by relevance unless orderBy is supplied and use cursor pagination. Limited to 30 requests per minute.",
             "args": [
               {
+                "name": "filter",
+                "description": "Filter returned documents.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "DocumentFilter",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "before",
                 "description": "Returns results before this cursor. Pair with `last` to paginate backward, using a cursor returned by the same connection. Keep the filters and ordering unchanged between pages. Cannot be combined with `first` or `after`.",
                 "type": {
@@ -84154,7 +84194,7 @@
           },
           {
             "name": "totalCount",
-            "description": "Number of candidates retrieved before filtering and pagination. Search caps candidates, so this is not an exact count of all matching documents.",
+            "description": "Number of candidates retrieved that match the document filter, before pagination. Search caps candidates, so this is not an exact count of all matching documents.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -90417,6 +90457,12 @@
           {
             "name": "expiringPromoCredit",
             "description": "A promotional usage credit grant is nearing its expiration.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "spendLimitReached",
+            "description": "Workspace spend reached a workspace spend limit.",
             "isDeprecated": false,
             "deprecationReason": null
           }
