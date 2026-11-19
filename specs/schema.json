@@ -96,16 +96,12 @@
           },
           {
             "name": "customer",
-            "description": "The customer subscribed to.",
+            "description": "The customer subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Customer",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Customer",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -13525,7 +13521,7 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "DateComparator",
-        "description": "Compares timestamps at millisecond precision. Accepts ISO 8601 timestamps or durations relative to when the filter runs; `{ gte: \"-P7D\" }` includes times from seven days ago onward. Combine `gte` and `lt` for a time window. A YYYY-MM-DD value means midnight UTC, so equality with a date does not match the whole day.",
+        "description": "Compares timestamps at millisecond precision. Accepts ISO 8601 timestamps or durations relative to when the filter runs; `{ gte: \"-P7D\" }` includes times from seven days ago onward. Combine `gte` and `lt` for a time window. A YYYY-MM-DD value means midnight in `timezone`, or UTC by default, so equality with a date does not match the whole day. Use `today` to match the whole current day.",
         "fields": null,
         "inputFields": [
           {
@@ -13620,6 +13616,26 @@
             "type": {
               "kind": "SCALAR",
               "name": "DateTimeOrDuration",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "today",
+            "description": "Matches today's calendar day, or its complement when false. Uses timezone, defaulting to UTC.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "timezone",
+            "description": "Timezone for calendar dates. Saved views use one timezone for all date filters.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null
@@ -14511,6 +14527,26 @@
               "ofType": null
             },
             "defaultValue": null
+          },
+          {
+            "name": "today",
+            "description": "Matches today's calendar day, or its complement when false. Uses timezone, defaulting to UTC.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "timezone",
+            "description": "Timezone for calendar dates. Saved views use one timezone for all date filters.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
           }
         ],
         "interfaces": null,
@@ -14731,6 +14767,26 @@
             "type": {
               "kind": "SCALAR",
               "name": "TimelessDateOrDuration",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "today",
+            "description": "Matches today's calendar day, or its complement when false. Uses timezone, defaulting to UTC.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "timezone",
+            "description": "Timezone for calendar dates. Saved views use one timezone for all date filters.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null
@@ -37231,6 +37287,18 @@
             "deprecationReason": null
           },
           {
+            "name": "filterTimezone",
+            "description": "[Internal] The timezone captured when the view was created. Missing values use UTC.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "shared",
             "description": "Whether the view is shared rather than personal. Sharing makes the view available to people in its scope; it does not grant access to issues, projects, or other items they could not otherwise see.",
             "args": [],
@@ -42817,6 +42885,18 @@
           {
             "name": "reviewFieldLabels",
             "description": "Whether to show GitHub labels on review list items. Null if the preference is unset.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "reviewFieldRisk",
+            "description": "Whether to show the pull request risk level on review list items. Null if the preference is unset.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -57676,16 +57756,12 @@
           },
           {
             "name": "customView",
-            "description": "The custom view subscribed to.",
+            "description": "The custom view subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "CustomView",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "CustomView",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -57971,16 +58047,12 @@
           },
           {
             "name": "cycle",
-            "description": "The cycle subscribed to.",
+            "description": "The cycle subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Cycle",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Cycle",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -58266,16 +58338,12 @@
           },
           {
             "name": "label",
-            "description": "The label subscribed to.",
+            "description": "The label subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueLabel",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "IssueLabel",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -58561,16 +58629,12 @@
           },
           {
             "name": "project",
-            "description": "The project subscribed to.",
+            "description": "The project subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Project",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Project",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -58856,16 +58920,12 @@
           },
           {
             "name": "initiative",
-            "description": "The initiative subscribed to.",
+            "description": "The initiative subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Initiative",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Initiative",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -59151,16 +59211,12 @@
           },
           {
             "name": "team",
-            "description": "The team subscribed to.",
+            "description": "The team subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Team",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "Team",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -59446,16 +59502,12 @@
           },
           {
             "name": "user",
-            "description": "The user subscribed to.",
+            "description": "The user subscribed to. Null if the subscriber can no longer access it.",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "User",
-                "kind": "OBJECT",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -95109,7 +95161,7 @@
           },
           {
             "name": "customerUpsert",
-            "description": "Finds a customer using the supplied UUID, external ID, Slack channel, or domains, and updates it; otherwise creates one. A name is required when no customer matches. Unlike customerUpdate, this operation can override integration-managed fields, and a tierName can create a new customer tier.",
+            "description": "Finds a customer using the supplied UUID, external ID, Slack channel, or domains, and updates it; otherwise creates one. A name is required when no customer matches. Unlike customerUpdate, this operation can override integration-managed fields, and a tierName can create a new customer tier when the caller has permission to manage customer settings.",
             "args": [
               {
                 "name": "input",
@@ -110571,7 +110623,7 @@
           },
           {
             "name": "tierName",
-            "description": "The customer tier’s name or display name. An existing matching tier is reused; otherwise a tier is created. Use this when importing named tiers, or use tierId to select a known tier. The two fields cannot be combined.",
+            "description": "The customer tier’s name or display name. An existing matching tier is reused; otherwise a tier is created, which requires permission to manage customer settings. Use this when importing named tiers, or use tierId to select a known tier. The two fields cannot be combined.",
             "type": {
               "kind": "SCALAR",
               "name": "String",
