@@ -7148,8 +7148,32 @@
             "deprecationReason": null
           },
           {
+            "name": "personalUser",
+            "description": "The user whose personal space holds the document, who owns and manages it. Null if the document belongs to a different parent entity type.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "generalAccess",
+            "description": "What users other than the owner can do with a document that is not personal: edit, comment, or view. People shared on the document with a higher role keep it. Null on a personal document, which only its owner and the people it is shared with can access.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "DocumentShareRole",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "workspaceAccess",
-            "description": "[Internal] What people who can open a document in a public team, or in a project with a public team, but are not members of its teams can do with it: edit, comment, or view. Never above general access. Null means the same as general access, and is always null on a personal document.",
+            "description": "What people who can open a document in a public team, or in a project with a public team, but are not members of its teams can do with it: edit, comment, or view. Never above general access. Null means the same as general access, and is always null on a personal document.",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -84806,8 +84830,32 @@
             "deprecationReason": null
           },
           {
+            "name": "personalUser",
+            "description": "The user whose personal space holds the document, who owns and manages it. Null if the document belongs to a different parent entity type.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "generalAccess",
+            "description": "What users other than the owner can do with a document that is not personal: edit, comment, or view. People shared on the document with a higher role keep it. Null on a personal document, which only its owner and the people it is shared with can access.",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "DocumentShareRole",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "workspaceAccess",
-            "description": "[Internal] What people who can open a document in a public team, or in a project with a public team, but are not members of its teams can do with it: edit, comment, or view. Never above general access. Null means the same as general access, and is always null on a personal document.",
+            "description": "What people who can open a document in a public team, or in a project with a public team, but are not members of its teams can do with it: edit, comment, or view. Never above general access. Null means the same as general access, and is always null on a personal document.",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -95606,7 +95654,7 @@
           },
           {
             "name": "documentCreate",
-            "description": "Creates a document in a project, issue, or release, with optional initial Markdown content. The returned document includes its assigned UUID and metadata; select content to read the resulting body.",
+            "description": "Creates a document in a project, issue, or release, or in your private documents with personalUserId, with optional initial Markdown content. The returned document includes its assigned UUID and metadata; select content to read the resulting body.",
             "args": [
               {
                 "name": "input",
@@ -95681,8 +95729,189 @@
             "deprecationReason": null
           },
           {
+            "name": "documentShare",
+            "description": "Shares a document and its sub-documents with workspace members at a role. On a personal document only the owner can share it. On any other document the owner, an owner of one of its teams, or a workspace admin can, the people must be able to see the document, and the role must be above its general access. People it is newly shared with are subscribed to the document. Users who already have another role move to the given one.",
+            "args": [
+              {
+                "name": "role",
+                "description": "The role to share the document at. Defaults to edit.",
+                "type": {
+                  "kind": "ENUM",
+                  "name": "DocumentShareRole",
+                  "ofType": null
+                },
+                "defaultValue": "edit"
+              },
+              {
+                "name": "userIds",
+                "description": "The identifiers of the users to share the document with.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": null,
+                    "kind": "LIST",
+                    "ofType": {
+                      "name": null,
+                      "kind": "NON_NULL",
+                      "ofType": {
+                        "name": "String",
+                        "kind": "SCALAR",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "id",
+                "description": "The identifier of the document to share.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": "String",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "DocumentPayload",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "documentUnshare",
+            "description": "Stops sharing a document and its sub-documents with users. Whoever can manage access to the document can remove anyone it is shared with; anyone else can only remove themselves.",
+            "args": [
+              {
+                "name": "userIds",
+                "description": "The identifiers of the users to remove from the document.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": null,
+                    "kind": "LIST",
+                    "ofType": {
+                      "name": null,
+                      "kind": "NON_NULL",
+                      "ofType": {
+                        "name": "String",
+                        "kind": "SCALAR",
+                        "ofType": null
+                      }
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "id",
+                "description": "The identifier of the document to stop sharing.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": "String",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "DocumentPayload",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "documentUpdateGeneralAccess",
+            "description": "Changes what users other than the owner can do with a document that is not personal: edit, comment, or view. Only the owner of the document, an owner of one of its teams, or a workspace admin can change it. Comment and view need an owner who can access the document.",
+            "args": [
+              {
+                "name": "previousGeneralAccess",
+                "description": "The general access level of this document when the change was confirmed. When given, the change fails if the document has another level now.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "applyToSubDocuments",
+                "description": "Whether to also change the sub-documents whose level equals the document's level before the change. Sub-documents with another level, without an owner who can access them, or that the user cannot loosen keep their level.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              },
+              {
+                "name": "generalAccess",
+                "description": "The new general access level: edit, comment, or view.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": "String",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "id",
+                "description": "The identifier of the document.",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "name": "String",
+                    "kind": "SCALAR",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "DocumentPayload",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "documentUpdateWorkspaceAccess",
-            "description": "[Internal] Changes what people outside a document's teams can do with a document in a public team or in a project with a public team: edit, comment, or view. It can't be above the document's general access. Only the owner of the document, an owner of one of its teams, or a workspace admin can change it. Comment and view need an owner who can access the document.",
+            "description": "Changes what people outside a document's teams can do with a document in a public team or in a project with a public team: edit, comment, or view. It can't be above the document's general access. Only the owner of the document, an owner of one of its teams, or a workspace admin can change it. Comment and view need an owner who can access the document.",
             "args": [
               {
                 "name": "previousWorkspaceAccess",
@@ -95747,7 +95976,7 @@
           },
           {
             "name": "documentDelete",
-            "description": "Moves a document to the trash and archives it, including the sub-documents covered by its archive cascade. It is not permanently removed by this mutation. You must be allowed to manage the document; use documentUnarchive to restore it.",
+            "description": "Moves a document to the trash and archives it, including the sub-documents covered by its archive cascade. It is not permanently removed by this mutation. You must be allowed to manage the document, or to edit it when it is a page of a private document; use documentUnarchive to restore it.",
             "args": [
               {
                 "name": "ifParentDocumentId",
@@ -95788,7 +96017,7 @@
           },
           {
             "name": "documentUnarchive",
-            "description": "Restores a trashed document and its eligible sub-documents. You must be allowed to manage the restored documents. If the containing resource is archived, restore that resource first.",
+            "description": "Restores a trashed document and its eligible sub-documents. You must be allowed to manage the restored documents, or to edit them when they are pages of a private document. If the containing resource is archived, restore that resource first.",
             "args": [
               {
                 "name": "id",
@@ -97620,6 +97849,16 @@
             "name": "integrationGithubConnect",
             "description": "Connects a GitHub App installation to the workspace using its installation ID and OAuth grant. If replacing a connection would make repositories used by GitHub Issues sync inaccessible, the call stops and returns gitHub.lostRepositoryNames. Review that list, then repeat with confirmReplace set to true to accept the change. GitHub Enterprise Cloud connections require the corresponding workspace plan feature.",
             "args": [
+              {
+                "name": "addLinkingInstallation",
+                "description": "[Internal] Set to true to keep the organization's code access integration and use this basic GitHub App installation for pull request linking and GitHub Issues sync in the repositories that the code access app cannot read.",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              },
               {
                 "name": "confirmReplace",
                 "description": "Confirm replacing an existing installation after a prior call reported lostRepositoryNames. Defaults to false.",
@@ -101991,7 +102230,7 @@
           },
           {
             "name": "oauthApplicationRotateSecret",
-            "description": "[ALPHA] Replaces the client secret for an application created by the caller and returns the new secret. Store it before discarding the response; it cannot be retrieved later. Tokens issued through client_credentials are revoked, while tokens from the authorization-code flow remain valid. The caller must be able to manage the application’s credentials, including its private-team access, as well as have workspace API management permission.",
+            "description": "[ALPHA] Replaces the client secret for an application created by the caller and returns the new secret. Store it before discarding the response; it cannot be retrieved later. The old secret stops working at once, as does a previous secret that a planned rotation kept working. Tokens issued through client_credentials are revoked, while tokens from the authorization-code flow remain valid. The caller must be able to manage the application’s credentials, including its private-team access, as well as have workspace API management permission.",
             "args": [
               {
                 "name": "id",
@@ -111513,6 +111752,16 @@
               "ofType": null
             },
             "defaultValue": null
+          },
+          {
+            "name": "personalUserId",
+            "description": "Creates the document in this user's private documents. Must be the acting user, or for a sub-document the owner of its private parent document.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
           }
         ],
         "interfaces": null,
@@ -111641,6 +111890,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "personalUserId",
+            "description": "Moves the document and its sub-documents into this user's personal space. Must be the acting user.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null
@@ -129631,6 +129890,134 @@
         "description": null,
         "fields": [
           {
+            "name": "workflowStateCreated",
+            "description": "Triggered when a workflow state is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "WorkflowState",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "workflowStateUpdated",
+            "description": "Triggered when a workflow state is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "WorkflowState",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "workflowStateArchived",
+            "description": "Triggered when a workflow state is archived",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "WorkflowState",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueHistoryCreated",
+            "description": "Triggered when an issue history is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueHistory",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueHistoryUpdated",
+            "description": "Triggered when an issue history is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueHistory",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueRelationCreated",
+            "description": "Triggered when an issue relation is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueRelation",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueRelationUpdated",
+            "description": "Triggered when an issue relation is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueRelation",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueRelationDeleted",
+            "description": "Triggered when an issue relation is deleted",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueRelation",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "agentActivityCreated",
             "description": "Triggered when an agent activity is created",
             "args": [],
@@ -129719,102 +130106,6 @@
               "name": null,
               "ofType": {
                 "name": "ProjectLabel",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "workflowStateCreated",
-            "description": "Triggered when a workflow state is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "WorkflowState",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "workflowStateUpdated",
-            "description": "Triggered when a workflow state is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "WorkflowState",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "workflowStateArchived",
-            "description": "Triggered when a workflow state is archived",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "WorkflowState",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueRelationCreated",
-            "description": "Triggered when an issue relation is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueRelation",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueRelationUpdated",
-            "description": "Triggered when an issue relation is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueRelation",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueRelationDeleted",
-            "description": "Triggered when an issue relation is deleted",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueRelation",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130031,14 +130322,14 @@
             "deprecationReason": null
           },
           {
-            "name": "favoriteCreated",
-            "description": "Triggered when a favorite is created",
+            "name": "documentContentCreated",
+            "description": "Triggered when a document content is created",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "name": "Favorite",
+                "name": "DocumentContent",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130047,78 +130338,14 @@
             "deprecationReason": null
           },
           {
-            "name": "favoriteUpdated",
-            "description": "Triggered when a favorite is updated",
+            "name": "documentContentUpdated",
+            "description": "Triggered when a document content is updated",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "name": "Favorite",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "favoriteDeleted",
-            "description": "Triggered when a favorite is deleted",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Favorite",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueLabelCreated",
-            "description": "Triggered when an issue label is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueLabel",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueLabelUpdated",
-            "description": "Triggered when an issue label is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueLabel",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "issueLabelDeleted",
-            "description": "Triggered when an issue label is deleted",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "IssueLabel",
+                "name": "DocumentContent",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130175,6 +130402,54 @@
             "deprecationReason": null
           },
           {
+            "name": "issueLabelCreated",
+            "description": "Triggered when an issue label is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueLabel",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueLabelUpdated",
+            "description": "Triggered when an issue label is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueLabel",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "issueLabelDeleted",
+            "description": "Triggered when an issue label is deleted",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "IssueLabel",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "teamCreated",
             "description": "Triggered when a team is created",
             "args": [],
@@ -130223,14 +130498,14 @@
             "deprecationReason": null
           },
           {
-            "name": "issueHistoryCreated",
-            "description": "Triggered when an issue history is created",
+            "name": "favoriteCreated",
+            "description": "Triggered when a favorite is created",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "name": "IssueHistory",
+                "name": "Favorite",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130239,14 +130514,142 @@
             "deprecationReason": null
           },
           {
-            "name": "issueHistoryUpdated",
-            "description": "Triggered when an issue history is updated",
+            "name": "favoriteUpdated",
+            "description": "Triggered when a favorite is updated",
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "name": "IssueHistory",
+                "name": "Favorite",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "favoriteDeleted",
+            "description": "Triggered when a favorite is deleted",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Favorite",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "roadmapCreated",
+            "description": "Triggered when a roadmap is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Roadmap",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "roadmapUpdated",
+            "description": "Triggered when a roadmap is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Roadmap",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "roadmapDeleted",
+            "description": "Triggered when a roadmap is deleted",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Roadmap",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectCreated",
+            "description": "Triggered when a project is created",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Project",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectUpdated",
+            "description": "Triggered when a project is updated",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Project",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectArchived",
+            "description": "Triggered when a project is archived",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Project",
+                "kind": "OBJECT",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectUnarchived",
+            "description": "Triggered when a project is unarchived",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "name": "Project",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130359,54 +130762,6 @@
               "name": null,
               "ofType": {
                 "name": "Document",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "roadmapCreated",
-            "description": "Triggered when a roadmap is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Roadmap",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "roadmapUpdated",
-            "description": "Triggered when a roadmap is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Roadmap",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "roadmapDeleted",
-            "description": "Triggered when a roadmap is deleted",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Roadmap",
                 "kind": "OBJECT",
                 "ofType": null
               }
@@ -130701,102 +131056,6 @@
               "name": null,
               "ofType": {
                 "name": "User",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "projectCreated",
-            "description": "Triggered when a project is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Project",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "projectUpdated",
-            "description": "Triggered when a project is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Project",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "projectArchived",
-            "description": "Triggered when a project is archived",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Project",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "projectUnarchived",
-            "description": "Triggered when a project is unarchived",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "Project",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "documentContentCreated",
-            "description": "Triggered when a document content is created",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "DocumentContent",
-                "kind": "OBJECT",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "documentContentUpdated",
-            "description": "Triggered when a document content is updated",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "name": "DocumentContent",
                 "kind": "OBJECT",
                 "ofType": null
               }
