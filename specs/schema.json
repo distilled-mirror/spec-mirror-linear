@@ -34588,7 +34588,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "JSON",
+              "name": "JSONObject",
               "ofType": null
             },
             "isDeprecated": false,
@@ -34600,7 +34600,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "JSON",
+              "name": "JSONObject",
               "ofType": null
             },
             "isDeprecated": false,
@@ -34614,7 +34614,7 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "name": "JSON",
+                "name": "JSONObject",
                 "kind": "SCALAR",
                 "ofType": null
               }
@@ -35000,7 +35000,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "JSON",
+              "name": "JSONObject",
               "ofType": null
             },
             "isDeprecated": false,
